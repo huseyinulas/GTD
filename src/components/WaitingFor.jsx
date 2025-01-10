@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useGTD } from '../context/GTDContext';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, formatDistanceToNow } from 'date-fns';
 import {
   PageHeader,
   Title,
@@ -91,6 +91,20 @@ const WaitingFor = () => {
               {task.waitUntil && (
                 <DetailItem>
                   <span>⏰</span> Until: {format(parseISO(task.waitUntil), 'MMM d, yyyy')}
+                  {' '}
+                  <span
+                    style={{
+                      color: (() => {
+                        const daysRemaining = (new Date(task.waitUntil) - new Date()) / (1000 * 60 * 60 * 24);
+                        if (daysRemaining < 5) return 'red';
+                        if (daysRemaining < 10) return 'orange';
+                        return 'green';
+                      })(),
+                      fontSize: '0.9em'
+                    }}
+                  >
+                    ({formatDistanceToNow(parseISO(task.waitUntil))} remaining)
+                  </span>
                 </DetailItem>
               )}
             </TaskDetails>
