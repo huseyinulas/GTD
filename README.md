@@ -2,6 +2,10 @@
 
 A modern task management web application that implements David Allen's Getting Things Done® (GTD) methodology. Built with React and Vite, GTD Flow helps you organize tasks, manage projects, and maintain a clear mind through structured organization.
 
+Website: https://gtd-teal.vercel.app/
+Data only store your browser local storage.
+
+
 ## Features
 
 - **Task Management**: Capture and organize tasks with contexts and priorities
