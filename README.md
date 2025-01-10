@@ -30,6 +30,7 @@ A modern task management web application that implements David Allen's Getting T
 1. Build the Docker image:
 
 docker build -t gtd-flow .
+
 docker run -p 8080:80 gtd-flow
 
 
