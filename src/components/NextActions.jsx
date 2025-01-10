@@ -22,11 +22,14 @@ import {
   StatCard,
   SearchBar,
   TaskNotes,
+  ProjectFilter,
+  ProjectTag,
 } from '../styles/components/NextActions.styles';
 
 const NextActions = () => {
-  const { tasks, updateTask, contexts, hiddenContexts } = useGTD();
+  const { tasks, updateTask, contexts, hiddenContexts, projects } = useGTD();
   const [selectedContext, setSelectedContext] = useState('');
+  const [selectedProject, setSelectedProject] = useState('');
   const [sortBy, setSortBy] = useState('dueDate');
   const [dueDateFilter, setDueDateFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -74,6 +77,7 @@ const NextActions = () => {
     tasks.filter(task => 
       task.status === 'next' && 
       (!selectedContext || task.context === selectedContext) &&
+      (!selectedProject || task.project === selectedProject) &&
       filterByDueDate(task) &&
       filterBySearch(task)
     )
@@ -113,6 +117,8 @@ const NextActions = () => {
   };
 
   const visibleContexts = contexts.filter(context => !hiddenContexts.has(context));
+
+  const activeProjects = projects.filter(p => p.status === 'active');
 
   return (
     <div>
@@ -154,7 +160,7 @@ const NextActions = () => {
             active={!selectedContext} 
             onClick={() => setSelectedContext('')}
           >
-            All
+            All Contexts
           </ContextButton>
           {visibleContexts.map(context => (
             <ContextButton
@@ -166,6 +172,24 @@ const NextActions = () => {
             </ContextButton>
           ))}
         </ContextFilter>
+
+        <ProjectFilter>
+          <ContextButton 
+            active={!selectedProject} 
+            onClick={() => setSelectedProject('')}
+          >
+            All Projects
+          </ContextButton>
+          {activeProjects.map(project => (
+            <ContextButton
+              key={project.id}
+              active={project.id === selectedProject}
+              onClick={() => setSelectedProject(project.id)}
+            >
+              {project.title}
+            </ContextButton>
+          ))}
+        </ProjectFilter>
 
         <FilterBar>
           <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
@@ -183,29 +207,36 @@ const NextActions = () => {
       </FilterSection>
 
       <TaskList>
-        {nextActionTasks.map(task => (
-          <TaskItem
-            key={task.id}
-            isOverdue={isTaskOverdue(task.dueDate)}
-            isDueToday={isTaskDueToday(task.dueDate)}
-          >
-            <TaskDetails>
-              <TaskTitle>{task.title}</TaskTitle>
-              {task.context && <Context>{task.context}</Context>}
-              {task.notes && <TaskNotes>{task.notes}</TaskNotes>}
-            </TaskDetails>
-            <TaskActions>
-              <DateInput
-                type="date"
-                value={task.dueDate || ''}
-                onChange={(e) => handleDueDateChange(task.id, e.target.value)}
-              />
-              <CompleteButton onClick={() => handleComplete(task)}>
-                Complete
-              </CompleteButton>
-            </TaskActions>
-          </TaskItem>
-        ))}
+        {nextActionTasks.map(task => {
+          const project = projects.find(p => p.id === task.project);
+          
+          return (
+            <TaskItem
+              key={task.id}
+              isOverdue={isTaskOverdue(task.dueDate)}
+              isDueToday={isTaskDueToday(task.dueDate)}
+            >
+              <TaskDetails>
+                <TaskTitle>{task.title}</TaskTitle>
+                <div>
+                  {task.context && <Context>{task.context}</Context>}
+                  {project && <ProjectTag>{project.title}</ProjectTag>}
+                </div>
+                {task.notes && <TaskNotes>{task.notes}</TaskNotes>}
+              </TaskDetails>
+              <TaskActions>
+                <DateInput
+                  type="date"
+                  value={task.dueDate || ''}
+                  onChange={(e) => handleDueDateChange(task.id, e.target.value)}
+                />
+                <CompleteButton onClick={() => handleComplete(task)}>
+                  Complete
+                </CompleteButton>
+              </TaskActions>
+            </TaskItem>
+          );
+        })}
       </TaskList>
     </div>
   );

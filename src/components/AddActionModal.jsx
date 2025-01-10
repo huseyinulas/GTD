@@ -1,101 +1,106 @@
 import { useState } from 'react';
 import { useGTD } from '../context/GTDContext';
-import { format } from 'date-fns';
+import { Input } from '../styles/shared';
 import {
   ModalOverlay,
   ModalContent,
+  ModalHeader,
   ModalTitle,
-  ContextInput,
-  ContextList,
-  ContextHint,
-  ButtonGroup,
-  SubmitButton,
-  CancelButton
-} from '../styles/components/AddActionModal.styles';
+  ModalBody,
+  ModalFooter,
+  Button,
+  Select,
+  TextArea
+} from '../styles/components/Modal.styles';
 
 const AddActionModal = ({ projectId, onClose }) => {
-  const { addTask, contexts, updateContexts } = useGTD();
-  const [newAction, setNewAction] = useState({ 
-    title: '', 
-    context: '' 
+  const { addTask, contexts } = useGTD();
+  const [newAction, setNewAction] = useState({
+    title: '',
+    notes: '',
+    context: '',
+    energy: 'low',
+    time: '5',
+    dueDate: '',
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (newAction.title.trim()) {
-      // Ensure context starts with @
-      const formattedContext = newAction.context.startsWith('@') 
-        ? newAction.context 
-        : `@${newAction.context}`;
-
-      // Add new context if it doesn't exist
-      if (formattedContext && !contexts.includes(formattedContext)) {
-        updateContexts([...contexts, formattedContext]);
-      }
-
       addTask({
         id: Date.now().toString(),
         title: newAction.title,
+        notes: newAction.notes,
+        context: newAction.context,
+        energy: newAction.energy,
+        time: newAction.time,
+        dueDate: newAction.dueDate,
         status: 'next',
         project: projectId,
-        context: formattedContext,
-        createdAt: new Date(),
-        dueDate: format(new Date(), 'yyyy-MM-dd')
+        createdAt: new Date().toISOString()
       });
       onClose();
     }
   };
 
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   return (
-    <ModalOverlay onClick={handleOverlayClick}>
-      <ModalContent onClick={e => e.stopPropagation()}>
-        <ModalTitle>Add Next Action</ModalTitle>
+    <ModalOverlay>
+      <ModalContent>
         <form onSubmit={handleSubmit}>
-          <Input
-            type="text"
-            placeholder="What's the next action?"
-            value={newAction.title}
-            onChange={(e) => setNewAction(prev => ({ ...prev, title: e.target.value }))}
-            autoFocus
-          />
-          <ContextInput
-            type="text"
-            list="contexts"
-            placeholder="Enter or select context"
-            value={newAction.context}
-            onChange={(e) => {
-              let value = e.target.value;
-              if (value && !value.startsWith('@')) {
-                value = `@${value}`;
-              }
-              setNewAction(prev => ({ 
-                ...prev, 
-                context: value
-              }));
-            }}
-          />
-          <ContextList id="contexts">
-            {contexts.map(context => (
-              <option key={context} value={context} />
-            ))}
-          </ContextList>
-          <ContextHint>
-            Type a new context or select an existing one
-          </ContextHint>
-          <ButtonGroup>
-            <CancelButton type="button" onClick={onClose}>
-              Cancel
-            </CancelButton>
-            <SubmitButton type="submit">
-              Add Action
-            </SubmitButton>
-          </ButtonGroup>
+          <ModalHeader>
+            <ModalTitle>Add New Action</ModalTitle>
+          </ModalHeader>
+          <ModalBody>
+            <Input
+              type="text"
+              placeholder="Action Title"
+              value={newAction.title}
+              onChange={(e) => setNewAction(prev => ({ ...prev, title: e.target.value }))}
+              autoFocus
+            />
+            <TextArea
+              placeholder="Notes (optional)"
+              value={newAction.notes}
+              onChange={(e) => setNewAction(prev => ({ ...prev, notes: e.target.value }))}
+            />
+            <Input
+              type="date"
+              value={newAction.dueDate}
+              onChange={(e) => setNewAction(prev => ({ ...prev, dueDate: e.target.value }))}
+              style={{ marginBottom: '1rem' }}
+            />
+            <Select
+              value={newAction.context}
+              onChange={(e) => setNewAction(prev => ({ ...prev, context: e.target.value }))}
+            >
+              <option value="">Select Context</option>
+              {contexts.map(context => (
+                <option key={context} value={context}>{context}</option>
+              ))}
+            </Select>
+            <Select
+              value={newAction.energy}
+              onChange={(e) => setNewAction(prev => ({ ...prev, energy: e.target.value }))}
+            >
+              <option value="low">Low Energy</option>
+              <option value="medium">Medium Energy</option>
+              <option value="high">High Energy</option>
+            </Select>
+            <Select
+              value={newAction.time}
+              onChange={(e) => setNewAction(prev => ({ ...prev, time: e.target.value }))}
+            >
+              <option value="5">5 minutes</option>
+              <option value="15">15 minutes</option>
+              <option value="30">30 minutes</option>
+              <option value="60">1 hour</option>
+              <option value="120">2+ hours</option>
+            </Select>
+          </ModalBody>
+          <ModalFooter>
+            <Button type="button" onClick={onClose}>Cancel</Button>
+            <Button type="submit" primary>Add Action</Button>
+          </ModalFooter>
         </form>
       </ModalContent>
     </ModalOverlay>

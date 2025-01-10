@@ -12,10 +12,13 @@ export const Title = styled.h2`
 
 export const FilterSection = styled.div`
   background: white;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 export const ContextFilter = styled.div`
@@ -190,4 +193,20 @@ export const TaskNotes = styled.p`
   font-size: 0.8125rem;
   margin: 0.375rem 0 0 0;
   line-height: 1.4;
+`;
+
+export const ProjectFilter = styled(ContextFilter)`
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+`;
+
+export const ProjectTag = styled.span`
+  background-color: #e9d5ff;
+  color: #6b21a8;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-left: 0.5rem;
 `; 

@@ -117,11 +117,17 @@ export const DeleteButton = styled(Button)`
   }
 `;
 
-export const AddActionButton = styled(Button)`
-  background-color: #10b981;
+export const AddActionButton = styled.button`
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.875rem;
   
   &:hover {
-    background-color: #059669;
+    background-color: #2563eb;
   }
 `;
 

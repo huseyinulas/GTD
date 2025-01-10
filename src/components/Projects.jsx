@@ -56,6 +56,7 @@ const Projects = () => {
   };
 
   const handleAddAction = (projectId) => {
+    console.log('Opening add action modal for project:', projectId);
     setSelectedProjectId(projectId);
   };
 
@@ -106,7 +107,10 @@ const Projects = () => {
             <ProjectHeader>
               <ProjectTitle>{project.title}</ProjectTitle>
               <ActionButtons>
-                <AddActionButton onClick={() => handleAddAction(project.id)}>
+                <AddActionButton 
+                  type="button"
+                  onClick={() => handleAddAction(project.id)}
+                >
                   Add Action
                 </AddActionButton>
                 {projectTasks.length === 0 ? (
@@ -141,7 +145,10 @@ const Projects = () => {
       {selectedProjectId && (
         <AddActionModal 
           projectId={selectedProjectId}
-          onClose={() => setSelectedProjectId(null)}
+          onClose={() => {
+            console.log('Closing modal');
+            setSelectedProjectId(null);
+          }}
         />
       )}
     </div>
