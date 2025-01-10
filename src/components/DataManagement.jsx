@@ -1,26 +1,8 @@
 import { useGTD } from '../context/GTDContext';
-import styled from '@emotion/styled';
-
-const Container = styled.div`
-  padding: 20px;
-  background: white;
-  border-radius: 4px;
-  margin: 20px 0;
-`;
-
-const Button = styled.button`
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 10px;
-  
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
+import {
+  Container,
+  Button
+} from '../styles/components/DataManagement.styles';
 
 const DataManagement = () => {
   const { tasks, projects, clearAllData, importData } = useGTD();
