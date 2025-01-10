@@ -19,39 +19,46 @@ A modern task management web application that implements David Allen's Getting T
 
 - Node.js (version 16 or higher)
 - npm or yarn
-## Docker
 
-### Prerequisites
+### Docker
+
+#### Prerequisites
 - Docker
 - Docker Compose (optional, for development environment)
 
-### Using Docker
+#### Using Docker
 
 1. Build the Docker image:
+    ```bash
+    docker build -t gtd-flow .
+    ```
 
-docker build -t gtd-flow .
-
-docker run -p 8080:80 gtd-flow
-
+2. Run the container:
+    ```bash
+    docker run -p 8080:80 gtd-flow
+    ```
 
 ### Installation
 
 1. Clone the repository:
-bash
-git clone https://github.com/yourusername/gtd-flow.git
-cd gtd-flow
+    ```bash
+    git clone https://github.com/yourusername/gtd-flow.git
+    cd gtd-flow
+    ```
 
 2. Install dependencies:
-bash
-npm install
-or
-yarn
+    ```bash
+    npm install
+    # or
+    yarn
+    ```
 
 3. Start the development server:
-bash
-npm run dev
-or
-yarn dev
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    ```
 
 Visit `http://localhost:5173` in your browser to see the application.
 
